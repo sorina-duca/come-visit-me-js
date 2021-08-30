@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { Schema } = require('mongoose');
+const validator = require('validator');
 
 mongoose.connect('mongodb://127.0.0.1:27017/come-visit-js', {
     useNewUrlParser: true,
@@ -31,6 +32,16 @@ const User = mongoose.model('User', {
         type: Boolean,
         required: true,
     },
+    email: {
+        type: String,
+        unique: true,
+        required: true,
+        validate(value) {
+            if (!validator.isEmail(value)) {
+                throw new Error('Email is not valid!');
+            }
+        },
+    },
 });
 
 const Couch = mongoose.model('Couch', {
@@ -61,10 +72,11 @@ const Couch = mongoose.model('Couch', {
 //     });
 
 new User({
-    name: 'Reza',
-    team: 'product',
+    name: 'Jenny',
+    team: 'hr',
     host: false,
     city: 'Berlin',
+    email: 'me247@gmail.com',
 })
     .save()
     .then((result) => {
