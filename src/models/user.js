@@ -4,6 +4,7 @@ const validator = require('validator');
 const Team = {
     product: 'product',
     hr: 'hr',
+    privacy: 'privacy',
 };
 
 const User = mongoose.model('User', {

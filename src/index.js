@@ -72,11 +72,3 @@ app.get('/couches', (req, res) => {
         })
         .catch((e) => res.status(500).send(e));
 });
-
-new Couch({
-    name: 'A',
-    city: 'b',
-})
-    .save()
-    .then(() => console.log('suc'))
-    .catch((e) => console.log(e));
