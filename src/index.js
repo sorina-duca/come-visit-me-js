@@ -49,6 +49,20 @@ app.get('/users/:id', async (req, res) => {
     }
 });
 
+app.delete('/users/:id', async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+        const user = await User.findByIdAndDelete(_id);
+        if (!user) {
+            return res.status(404).send();
+        }
+        res.send(user);
+    } catch (error) {
+        res.status(500).send(error);
+    }
+});
+
 app.patch('/users/:id', async (req, res) => {
     const _id = req.params.id;
 
@@ -88,6 +102,21 @@ app.get('/couches/:id', async (req, res) => {
 
     try {
         const couch = await Couch.findById(_id);
+        if (!couch) {
+            return res.status(404).send();
+        }
+
+        res.send(couch);
+    } catch (e) {
+        res.status(500).send(e);
+    }
+});
+
+app.delete('/couches/:id', async (req, res) => {
+    const _id = req.params.id;
+
+    try {
+        const couch = await Couch.findByIdAndDelete(_id);
         if (!couch) {
             return res.status(404).send();
         }
