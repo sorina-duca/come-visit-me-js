@@ -15,12 +15,12 @@ router.post('/couches', async (req, res) => {
 
 router.patch('/couches/:id', async (req, res) => {
     const _id = req.params.id;
+    const updates = Object.keys(req.body);
 
     try {
-        const couch = await Couch.findByIdAndUpdate(_id, req.body, {
-            new: true,
-            runValidators: true,
-        });
+        const couch = await Couch.findById(_id);
+        updates.forEach((update) => (couch[update] = req.body[update]));
+
         if (!couch) {
             return res.status(404).send();
         }
