@@ -1,6 +1,11 @@
 const express = require('express');
 const User = require('../models/user');
 const router = new express.Router();
+const auth = require('../middleware/authentication');
+
+router.get('/users/me', auth, async (req, res) => {
+    res.send(req.user);
+});
 
 router.post('/users', async (req, res) => {
     const user = new User(req.body);
@@ -71,15 +76,6 @@ router.patch('/users/:id', async (req, res) => {
         res.send(user);
     } catch (error) {
         res.status(500).send(error);
-    }
-});
-
-router.get('/users', async (req, res) => {
-    try {
-        const users = await User.find({});
-        res.send(users);
-    } catch (e) {
-        res.status(500).send(e);
     }
 });
 
