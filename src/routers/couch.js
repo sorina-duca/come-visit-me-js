@@ -1,9 +1,13 @@
 const express = require('express');
 const Couch = require('../models/couch');
+const auth = require('../middleware/authentication');
 const router = new express.Router();
 
-router.post('/couches', async (req, res) => {
-    const couch = new Couch(req.body);
+router.post('/couches', auth, async (req, res) => {
+    const couch = new Couch({
+        ...req.body,
+        host: req.user._id,
+    });
 
     try {
         await couch.save();

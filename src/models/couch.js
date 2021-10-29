@@ -11,7 +11,8 @@ const Couch = mongoose.model('Couch', {
     },
     host: {
         type: Schema.Types.ObjectId,
-        ref: 'Host',
+        ref: 'User',
+        required: true,
     },
 });
 
