@@ -17,20 +17,30 @@ router.post('/couches', auth, async (req, res) => {
     }
 });
 
-router.patch('/couches/:id', async (req, res) => {
+router.patch('/couches/:id', auth, async (req, res) => {
     const _id = req.params.id;
     const updates = Object.keys(req.body);
 
     try {
-        const couch = await Couch.findById(_id);
-        updates.forEach((update) => (couch[update] = req.body[update]));
+        const couch = await Couch.findOne({ _id, host: req.user._id });
 
         if (!couch) {
             return res.status(404).send();
         }
+        updates.forEach((update) => (couch[update] = req.body[update]));
+        await couch.save();
         res.send(couch);
     } catch (error) {
         res.status(500).send(error);
+    }
+});
+
+router.get('/couches/mine', auth, async (req, res) => {
+    try {
+        await req.user.populate('couches');
+        res.send(req.user.couches);
+    } catch (e) {
+        res.status(500).send(e);
     }
 });
 
@@ -39,6 +49,7 @@ router.get('/couches/:id', async (req, res) => {
 
     try {
         const couch = await Couch.findById(_id);
+
         if (!couch) {
             return res.status(404).send();
         }
@@ -49,11 +60,11 @@ router.get('/couches/:id', async (req, res) => {
     }
 });
 
-router.delete('/couches/:id', async (req, res) => {
+router.delete('/couches/:id', auth, async (req, res) => {
     const _id = req.params.id;
 
     try {
-        const couch = await Couch.findByIdAndDelete(_id);
+        const couch = await Couch.findOne({ _id, host: req.user._id });
         if (!couch) {
             return res.status(404).send();
         }

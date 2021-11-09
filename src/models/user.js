@@ -66,8 +66,8 @@ const userSchema = new mongoose.Schema({
 userSchema.virtual('couches', {
     ref: 'Couch',
     localField: '_id',
-    foreignField: 'host'
-})
+    foreignField: 'host',
+});
 
 userSchema.methods.toJSON = function () {
     const user = this;
@@ -83,7 +83,6 @@ userSchema.methods.generateAuthToken = async function () {
     const user = this;
     const token = jwt.sign({ _id: user._id.toString() }, 'IammovingtoValencia');
     user.tokens = user.tokens.concat({ token });
-    console.log(user.tokens);
     await user.save();
     return token;
 };

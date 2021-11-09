@@ -2,6 +2,7 @@ const express = require('express');
 const User = require('../models/user');
 const router = new express.Router();
 const auth = require('../middleware/authentication');
+const mongoose = require('mongoose');
 
 router.get('/users/me', auth, async (req, res) => {
     res.send(req.user);
